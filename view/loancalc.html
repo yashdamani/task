@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Loan Calculator</title>
+</head>
+<body>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		
+
+		var form = document.createElement("FORM");
+		form.setAttribute("id", "loancalc");
+		form.setAttribute("method", "POST");
+		form.setAttribute("action", "/");
+		document.body.appendChild(form);
+
+		var principle = document.createElement("LABEL");
+		var principleText = document.createTextNode("Principle: ");
+		principle.setAttribute("for", "Principle")
+		principle.appendChild(principleText);
+		form.appendChild(principle);
+
+		var inputPrinciple = document.createElement("INPUT");
+		inputPrinciple.setAttribute("type", "text");
+		inputPrinciple.setAttribute("id", "principle");
+		inputPrinciple.setAttribute("name", "principle");
+		form.appendChild(inputPrinciple);
+
+		var break1 = document.createElement("BR");
+		form.appendChild(break1);
+
+		var rate = document.createElement("LABEL");
+		var rateText = document.createTextNode("Rate: ");
+		rate.setAttribute("for", "Rate");
+		rate.appendChild(rateText);
+		form.appendChild(rate);
+
+		var inputRate = document.createElement("INPUT");
+		inputRate.setAttribute("type", "text");
+		inputRate.setAttribute("id", "rate");
+		inputRate.setAttribute("name", "rate");
+
+		form.appendChild(inputRate);
+
+		var break2 = document.createElement("BR");
+		form.appendChild(break2);
+
+		var time = document.createElement("LABEL");
+		var timeText = document.createTextNode("Time: ");
+		time.setAttribute("for", "Time")
+		time.appendChild(timeText);
+		form.appendChild(time);
+
+		var inputTime = document.createElement("INPUT");
+		inputTime.setAttribute("type", "text");
+		inputTime.setAttribute("id", "time");
+		inputTime.setAttribute("name", "time");
+		form.appendChild(inputTime);
+
+		var break3 = document.createElement("BR");
+		form.appendChild(break3);
+
+		var calculateButton = document.createElement("BUTTON");
+		var calcText = document.createTextNode("Interest:");
+		calculateButton.setAttribute("onclick", "calc()");
+		calculateButton.setAttribute("type", "submit");
+		calculateButton.appendChild(calcText)
+		form.appendChild(calculateButton);
+
+		var result = document.createElement("INPUT");
+	   var resultText = document.createTextNode('');
+		result.setAttribute("id", "result");
+		result.setAttribute("rows", 2);
+		result.setAttribute("columns", 10);
+		result.setAttribute("readonly", "true");
+	   result.appendChild(resultText);
+	   calculateButton.appendChild(result);
+
+	    var googleChart = document.createElement("DIV");
+	    googleChart.setAttribute("id", "piechart");
+	    document.body.appendChild(googleChart);
+
+	    function drawChart() {
+			var data = google.visualization.arrayToDataTable([
+			['Principle', 'Total Interest'],
+			['Principle', document.getElementById("principle").value * 1],
+			['Total Interest', document.getElementById("result").value * 1],
+			
+			]);
+			var options = {'title':`Total amount to be paid(P+I): ${eval(document.getElementById("principle").value)	+ eval(document.getElementById("result").value) || 0}`, 'width':550, 'height':550};
+
+			var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  			chart.draw(data,options);
+		}
+
+
+		function calc() {
+			var p = document.getElementById("principle").value;
+			var r = document.getElementById("rate").value/100;
+			var t = document.getElementById("time").value * 12;
+			var sum = (p*r*t)/100;
+			var result = document.getElementById("result").value = sum;
+			google.charts.load('current', {'packages':['corechart']});
+			google.charts.setOnLoadCallback(drawChart);
+
+		}
+		
+	</script>
+
+</body>
+</html>
